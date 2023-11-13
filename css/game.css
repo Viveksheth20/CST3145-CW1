@@ -1,0 +1,75 @@
+/* styling for the main container */
+.container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 2rem
+}
+
+/* Styling for the body */
+body {
+    color: white;
+}
+
+/* Styling for the block in which the options are shown */
+.option-container {
+    display: flex;
+    margin-bottom: 0 6rem;
+    width: 100%;
+    border-radius: 5px;
+    background: red;
+    font-size: 20px;
+    min-width: 80rem;
+}
+
+/* animated styling for the block in which the options are shown */
+.option-container:hover {
+    cursor: pointer;
+    padding: 5px;
+    color: rgb(0, 0, 0);
+    transform: scale(1.01);
+    transform: transform 100ms;
+}
+
+/* Styling for the word on the option block */
+.option-prefix {
+    padding: 1rem 1.5rem;
+    color: white;
+}
+
+/* Styling fot the word on the block */
+.option-text {
+    padding: 1rem;
+    width: 100%;
+}
+
+/* The block turns green if  the answer is correct*/
+.correct {
+    background-color: rgb(9, 147, 9);
+}
+
+/* The block turns red if the answer is incorrect */
+.incorrect {
+    background-color: rgb(255, 0, 0);
+}
+
+/* Styling for the first buttons on the main page */
+.click:hover {
+    padding: 5px;
+}
+
+/* Styling for the second button on the main page */
+.click1:hover {
+    padding: 5px;
+}
+
+/* styling for showing the output */
+@media screen and (max-width: 768px) {
+    .option-container {
+        min-width: 40rem;
+    }
+}
