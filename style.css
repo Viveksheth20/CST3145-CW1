@@ -1,0 +1,38 @@
+.card {
+  margin-top:100px;
+  width: 300px;
+  height: 300px;
+  box-sizing: border-box;
+  float: left;
+  padding-top: 0px;
+  background: #FDFDFD;
+}
+
+.card i {
+  float: left;
+  height: 20px;
+  display: block;
+  text-align: center;
+  margin: auto;
+  display: block;
+  padding-top: 5px;
+}
+
+.card p {
+  padding-top: 0 8px;
+  padding-left: 5px;
+}
+
+
+.card button {
+  background: rgb(117, 113, 113);
+  color: #000000;
+  padding: 15px;
+  width: 100%;
+  margin-top: 5px;
+}
+.card button:hover
+{
+  background-color: rgb(0, 0, 0);
+  color: #FDFDFD;
+}

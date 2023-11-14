@@ -3,22 +3,23 @@
 
 <head>
   <title>CS3145 CW1</title>
-  <link rel="shortcut icon" href="E:/bmw-white-logo.ico" type="image/x-con">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="style.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.8/dist/vue.js"></script>
+
   <style>
-    body {
-      width: 00px;
-    }
+   
   </style>
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-md bg-dark fixed-top" style="background-color: black;">
+  <div id="app">
+    <!-- Output banner and first part of navigation -->
+    <nav class="navbar navbar-expand-md bg-dark fixed-top" style="background-color: black;">
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
       <ul class="navbar-nav">
         <li>
@@ -29,7 +30,7 @@
                 <button class="btn" class="submit"
                   style="background-color: black; width: px; height: 40px; margin-top:-1px">
                   <a href="#"><img src="Images\search.png"
-                      style="width: 30px; height: 30px; margin-top:-5px; background-color: ;"></a>
+                      style="width: 30px; height: 30px; margin-top:-5px;"></a>
                 </button>
               </div>
             </div>
@@ -40,106 +41,43 @@
           style="width: 40px; height: 40px; margin-left: 50px; margin-top: 20px;"></a>
     </div>
   </nav>
-  <div id="sort" style="margin-left:1150px; margin-top:100px;">
-    <select style="margin-bottom:20px; background-color:#000000; color:#ffffff;">
-      <option>---SORT---</option>
-      <option value="Sunject">SUBJECT</option>
-      <option value="Location">LOCATION</option>
-      <option value="Price">PRICE</option>
-      <option value="Availability">AVAILABILITY</option>
-    </select>
-  </div>
-  <div class="container" style="margin-top: 0px; margin-left: 50px;">
-    <div class="card bg-light" style="width: 300px; height: 200px;">
-      <div class="card-body text-center" style="margin-right: 95px; margin-bottom: 100px;">
-        <b>Subject: Maths</b><br>
-        <b>Location: London</b><br><b>Price: $100</b><br>
-        <b>Spaces: 8</b>
-        <img src="Images\maths.png" alt="" style="width: 80px; height: 80px; margin-left: 180px; margin-top: -120px;">
-        <button class="addcart" style="margin-left: 50px; width: 150px;"><a href="#" style="text-decoration: none; color: black;"><b>ADD TO CART</b></a></button>
-      </div>
+
+    <div class="card" v-for="lesson in lessons">
+        <div class="card-body text-center">
+            <p><b>Subject: </b>{{lesson.subject}}</p>
+            <p><b>Location: </b>{{lesson.location}}</p>
+            <p><b>Price: </b>£{{lesson.price}}</p>
+            <p><b>Availability: </b>{{lesson.spaces}}</p>
+        </div>
+        <img :src="lesson.image" style="width: 50px; margin-left: 130px; padding: 0px;"></img>
+        <button><b>Add to Cart</b></button>
     </div>
-    <div class="container" style="margin-top: -199px; margin-left: 310px;">
-      <div class="card bg-light" style="width: 300px; height: 200px;">
-        <div class="card-body text-center" style="margin-right: 95px; margin-bottom: 100px;">
-          <b>Subject: Maths</b><br>
-          <b>Location: London</b><br><b>Price: $100</b><br>
-          <b>Spaces: 8</b>
-          <img src="Images\maths.png" alt="" style="width: 80px; height: 80px; margin-left: 180px; margin-top: -120px;">
-          <button class="addcart" style="margin-left: 50px; width: 170px;"><a href="#" style="text-decoration: none; color: black;"><b>ADD TO CART</b></a></button>
-        </div>
-      </div>
-      <div class="container" style="margin-top: -199px; margin-left: 310px;">
-        <div class="card bg-light" style="width: 300px; height: 200px;">
-          <div class="card-body text-center" style="margin-right: 95px; margin-bottom: 100px;">
-            <b>Subject: Maths</b><br>
-            <b>Location: London</b><br><b>Price: $100</b><br>
-            <b>Spaces: 8</b>
-            <img src="Images\maths.png" alt=""
-              style="width: 80px; height: 80px; margin-left: 180px; margin-top: -120px;">
-            <button class="addcart" style="margin-left: 50px; width: 170px;"><a href="#" style="text-decoration: none; color: black;"><b>ADD TO CART</b></a></button>
-          </div>
-        </div>
-        <div class="container" style="margin-top: -199px; margin-left: 310px;">
-          <div class="card bg-light" style="width: 300px; height: 200px;">
-            <div class="card-body text-center" style="margin-right: 95px; margin-bottom: 100px;">
-              <b>Subject: Maths</b><br>
-              <b>Location: London</b><br><b>Price: $100</b><br>
-              <b>Spaces: 8</b>
-              <img src="Images\maths.png" alt=""
-                style="width: 80px; height: 80px; margin-left: 180px; margin-top: -120px;">
-              <button class="addcart" style="margin-left: 50px; width: 170px;"><a href="#" style="text-decoration: none; color: black;"><b>ADD TO
-                    CART</b></a></button>
-            </div>
-          </div><br>
-          <div class="container" style="margin-top: 10px; margin-left: -990px;">
-            <div class="card bg-light" style="width: 300px; height: 200px;">
-              <div class="card-body text-center" style="margin-right: 95px; margin-bottom: 100px;">
-                <b>Subject: Maths</b><br>
-                <b>Location: London</b><br><b>Price: $100</b><br>
-                <b>Spaces: 8</b>
-                <img src="Images\maths.png" alt=""
-                  style="width: 80px; height: 80px; margin-left: 180px; margin-top: -120px;">
-                <button class="addcart" style="margin-left: 50px; width: 170px;"><a href="#" style="text-decoration: none; color: black;"><b>ADD TO
-                      CART</b></a></button>
-              </div>
-            </div>
-            <div class="container" style="margin-top: -199px; margin-left: 310px;">
-              <div class="card bg-light" style="width: 300px; height: 200px;">
-                <div class="card-body text-center" style="margin-right: 95px; margin-bottom: 100px;">
-                  <b>Subject: Maths</b><br>
-                  <b>Location: London</b><br><b>Price: $100</b><br>
-                  <b>Spaces: 8</b>
-                  <img src="Images\maths.png" alt=""
-                    style="width: 80px; height: 80px; margin-left: 180px; margin-top: -120px;">
-                  <button class="addcart" style="margin-left: 50px; width: 170px;"><a href="#" style="text-decoration: none; color: black;"><b>ADD TO
-                        CART</b></a></button>
-                </div>
-              </div><br>
-              <div class="container" style="margin-top: -223px; margin-left: 310px;">
-                <div class="card bg-light" style="width: 300px; height: 200px;">
-                  <div class="card-body text-center" style="margin-right: 95px; margin-bottom: 100px;">
-                    <b>Subject: Maths</b><br>
-                    <b>Location: London</b><br><b>Price: $100</b><br>
-                    <b>Spaces: 8</b>
-                    <img src="Images\maths.png" alt=""
-                      style="width: 80px; height: 80px; margin-left: 180px; margin-top: -120px;">
-                    <button class="addcart" style="margin-left: 50px; width: 170px;"><a href="#" style="text-decoration: none; color: black;"><b>ADD TO
-                          CART</b></a></button>
-                  </div>
-                </div><br>
-                <div class="container" style="margin-top: -223px; margin-left: 310px;">
-                  <div class="card bg-light" style="width: 300px; height: 200px;">
-                    <div class="card-body text-center" style="margin-right: 95px; margin-bottom: 100px;">
-                      <b>Subject: Maths</b><br>
-                      <b>Location: London</b><br><b>Price: $100</b><br>
-                      <b>Spaces: 8</b>
-                      <img src="Images\maths.png" alt=""
-                        style="width: 80px; height: 80px; margin-left: 180px; margin-top: -120px;">
-                      <button class="addcart" style="margin-left: 50px; width: 170px;"><a href="#" style="text-decoration: none; color: black;"><b>ADD TO
-                            CART</b></a></button>
-                    </div>
-                  </div><br>
-                 </div>
+</div>
+<script>
+    let app = new Vue({
+        el: "#app",
+        data: {
+            lessons: []
+        },
+        mounted() {
+            // Fetch lessons data from an external JSON file using Fetch API
+            fetch('lessons.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Assign the fetched data to the Vue instance's data property
+                    this.lessons = data.lessons;
+                })
+                .catch(error => {
+                    console.error('Error fetching lessons:', error);
+                });
+        }
+    })
+
+    </script>
 </body>
 </html>
