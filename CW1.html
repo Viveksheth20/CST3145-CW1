@@ -21,27 +21,37 @@
     <!-- Output banner and first part of navigation -->
     <nav class="navbar navbar-expand-md bg-dark fixed-top" style="background-color: black;">
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
-      <ul class="navbar-nav">
-        <li>
-          <form class="navbar-form navbar-right" style="margin-left:1100px; margin-top:20px;">
+          <form class="navbar-form navbar-right" style="margin-left:1000px; margin-top:20px;">
             <div class="input-group">
               <input type="text" class="form-control" placeholder="SEARCH" name="search">
               <div class="input-group-btn" style="background-color: black; margin-top: 0.5px; width: 40px;">
-                <button class="btn" class="submit"
+                <a href="#"><button class="btn" class="submit"
                   style="background-color: black; width: px; height: 40px; margin-top:-1px">
-                  <a href="#"><img src="Images\search.png"
-                      style="width: 30px; height: 30px; margin-top:-5px;"></a>
-                </button>
+                    <img src="Images\search.png"
+                      style="width: 30px; height: 30px; margin-top:-5px;">
+                </button></a>
               </div>
             </div>
           </form>
-        </li>
-      </ul>
-      <a href="#"><img src="Images\basket1.png" id="user"
-          style="width: 40px; height: 40px; margin-left: 50px; margin-top: 20px;"></a>
+          <div class="cart"> <button type="submit" @click="showCheckout" v-if="disableCart" style="margin-left: 50px;"><img
+            src="Images/basket1.png"> {{cartItemCount}}</button>
+    <button disabled='disabled' v-else style="margin-left: 50px;">
+        <img src="Images/basket1.png" style="width: 50px; height: 50px;">{{cartItemCount}}
+    </button>
+
+</div>
+
     </div>
   </nav>
-
+  <div class="sort" style="margin-left:1300px; margin-top:100px;">
+    <select style="margin-bottom:20px; background-color:#000000; color:#ffffff;">
+      <option>---SORT---</option>
+      <option value="SUBJECT"><a href="#">SUBJECT</a></option>
+      <option value="LOCATION"><a href="#">LOCATION</a></option>
+      <option value="PRICE"><a href="#">PRICE</a></option>
+      <option value="AVAILABILITY"><a href="#">AVAILABILITY</a></option>
+    </select>
+  </div>
     <div class="card" v-for="lesson in lessons">
         <div class="card-body text-center">
             <p><b>Subject: </b>{{lesson.subject}}</p>
@@ -50,7 +60,7 @@
             <p><b>Availability: </b>{{lesson.spaces}}</p>
         </div>
         <img :src="lesson.image" style="width: 50px; margin-left: 130px; padding: 0px;"></img>
-        <button><b>Add to Cart</b></button>
+        <button v-on:click="addToCart">Add to cart</button>
     </div>
 </div>
 <script>
@@ -59,6 +69,7 @@
         data: {
             lessons: []
         },
+        
         mounted() {
             // Fetch lessons data from an external JSON file using Fetch API
             fetch('lessons.json')
