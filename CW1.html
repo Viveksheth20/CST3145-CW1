@@ -33,10 +33,11 @@
           </div>
         </form>
         <button @click="showCheckout" style="margin-left:50px; background-color: #00000000;">
-          <img style="height:40px; width:50px;" src="images\basket1.png">&nbsp;&nbsp;&nbsp; <b>{{cartItemCount}}&nbsp;&nbsp;</b>
+          <img style="height:40px; width:50px;" src="images\basket1.png">&nbsp;&nbsp;&nbsp;
+          <b>{{cartItemCount}}&nbsp;&nbsp;</b>
         </button>
         <button disabled='disabled' v-else><img src="images/cart.png"><b>Basket {{cartItemCount}}</b></button>
-  </div>
+      </div>
     </nav>
     <div v-if="showProduct">
       <div class="sort" style="margin-left:1300px; margin-top:100px;">
@@ -56,16 +57,16 @@
           <p><b>Availability: </b>{{lesson.spaces}}</p>
         </div>
         <img :src="lesson.image" style="width: 50px; margin-left: 130px; padding: 0px;"></img>
-        <button disabled='disabled'  v-if="lesson.spaces === 0"><b>Add to Cart</b></button>
+        <button disabled='disabled' v-if="lesson.spaces === 0"><b>Add to Cart</b></button>
         <button @click="addItem(lesson)" v-if="lesson.spaces !== 0"><b>Add to Cart</b></button>
         <span v-if='lesson.spaces === 0'>All out!</span>
         <span v-else-if="lesson.spaces < 5">
-            Only {{lesson.spaces }} left!
+          Only {{lesson.spaces }} left!
         </span>
-</div>
+      </div>
     </div>
     <div v-else>
-      <!-- the code for the checkout page -->
+      <!-- Basket page -->
       <div class="card" v-for="lesson in cart" style="margin-top: 150px;">
         <div class="card-body text-center">
           <p><b>Subject: </b>{{lesson.subject}}</p>
@@ -74,76 +75,104 @@
           <p><b>Availability: </b>{{lesson.spaces}}</p>
         </div>
         <img :src="lesson.image" style="width: 50px; margin-left: 130px; padding: 0px;"></img>
-        <button @click="addItem(lesson)">Add to cart</button>
+        <button @click="removeItem(lesson)"> Remove</button>
       </div>
     </div>
-  </div>
-  <script>
-    let app = new Vue({
-      el: "#app",
-      data: {
-        cart: [],
-        lessons: [],
-        showProduct: true,
-      },
-
-      methods: {
-        addItem: function (lesson) {
-          this.cart.push(lesson);
-                    console.log(lesson);
-                    this.lessons[lesson.id].availability -= 1;
-                    console.log(this.cartCount(lesson.id));
-                    console.log(this.lessons[lesson.id]);
-                    console.log(this.lessons[lesson.id].availability);
-                },
-        showCheckout() {
-          this.showProduct = this.showProduct ? false : true;
+    <div class="checkout" style="margin-top: 100px;">
+      <h2>Checkout</h2
+      <form id="checkoutForm">
+        <table>
+          <tr>
+            <td><label for="name"><b>Name:</b></label></td>
+            <td><input type="text" id="name" name="name" required></td>
+          </tr>
+          <tr>
+            <td><label for="phone"><b>Phone Number:</b></label></td>
+            <td>
+              <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" required>
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td><button type="submit"><b>Checkout</b></button></td>
+          </tr>
+        </table>
+      </form>
+    </div>
+    <script>
+      let app = new Vue({
+        el: "#app",
+        data: {
+          cart: [],
+          lessons: [],
+          showProduct: true,
         },
-        cartCount(id) {
-                    let count = 0;
-                    for (let i = 0; i < this.cart.length; i++) {
-                        if (this.cart[i].id === id) {
-                            count++;
-                        }
-                    }
-                    return count;
-                },
-                canAddToCart(arrayy) {
-                    return arrayy.availability > this.cartCount(arrayy.id);
-                },
-      },
 
-      computed: {
-
-        cartItemCount: function () { // the property name
-          // its value is calculated when it is called
-          return this.cart.length || 0;
-        },
-        disableCart: function () {
-          return this.cartItemCount > 0;
-        },
-      },
-
-      mounted() {
-        // Fetch lessons data from an external JSON file using Fetch API
-        fetch('lessons.json')
-          .then(response => {
-            if (!response.ok) {
-              throw new Error('Network response was not ok');
+        methods: {
+          addItem: function (lesson) {
+            this.cart.push(lesson);
+            console.log(lesson);
+            this.lessons[lesson.id].spaces -= 1;
+            console.log(this.cartCount(lesson.id));
+            console.log(this.lessons[lesson.id]);
+            console.log(this.lessons[lesson.id].spaces);
+          },
+          removeItem: function (lesson) {
+            this.cart.push(lesson);
+            console.log(lesson);
+            this.lessons[lesson.id].spaces -= -1;
+            console.log(this.cartCount(lesson.id));
+            console.log(this.lessons[lesson.id]);
+            console.log(this.lessons[lesson.id].spaces);
+          },
+          showCheckout() {
+            this.showProduct = this.showProduct ? false : true;
+          },
+          cartCount(id) {
+            let count = 0;
+            for (let i = 0; i < this.cart.length; i++) {
+              if (this.cart[i].id === id) {
+                count++;
+              }
             }
-            return response.json();
-          })
-          .then(data => {
-            // Assign the fetched data to the Vue instance's data property
-            this.lessons = data.lessons;
-          })
-          .catch(error => {
-            console.error('Error fetching lessons:', error);
-          });
-      }
-    })
+            return count;
+          },
+          canAddToCart(arrayy) {
+            return arrayy.availability > this.cartCount(arrayy.id);
+          },
+        },
 
-  </script>
+        computed: {
+
+          cartItemCount: function () { // the property name
+            // its value is calculated when it is called
+            return this.cart.length || 0;
+          },
+          disableCart: function () {
+            return this.cartItemCount > 0;
+          },
+        },
+
+        mounted() {
+          // Fetch lessons data from an external JSON file using Fetch API
+          fetch('lessons.json')
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              return response.json();
+            })
+            .then(data => {
+              // Assign the fetched data to the Vue instance's data property
+              this.lessons = data.lessons;
+            })
+            .catch(error => {
+              console.error('Error fetching lessons:', error);
+            });
+        }
+      })
+
+    </script>
 </body>
 
 </html>
