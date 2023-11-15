@@ -1,9 +1,9 @@
-nav
-{
+nav {
   background-color: #000000;
 }
+
 .card {
-  margin-top:20px;
+  margin-top: 20px;
   width: 300px;
   height: 300px;
   box-sizing: border-box;
@@ -33,14 +33,14 @@ nav
   color: #000000;
   padding: 15px;
   width: 100%;
-  margin-top: 5px;
+  margin-top: 5px;
 }
-.card button:hover
-{
+
+.card button:hover {
   background-color: rgb(0, 0, 0);
   color: #FDFDFD;
 }
-button:hover
-{
-  background-color: #695858;  
+
+button:hover {
+  background-color: #695858;
 }
