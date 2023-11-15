@@ -40,7 +40,12 @@
     <div v-if="showProduct">
       <div style="margin-top: 100px;" id="sortByForm">
         <label>
-          <input type="radio" v-model="sortby" value="subject" checked>
+          <input type="radio" v-model="sortby" value="sort" checked>
+          Default
+        </label>
+
+        <label>
+          <input type="radio" v-model="sortby" value="subject">
           Sort by subject
         </label>
 
@@ -73,7 +78,7 @@
           <p><b>Price: </b>£{{lesson.price}}</p>
           <p><b>spaces: </b>{{lesson.spaces}}</p>
         </div>
-        <img :src="lesson.image" style="width: 50px; margin-left: 130px; padding: 0px;"></img>
+        <img :src="lesson.image" style="width: 50px; margin-left: 130px; padding: 0px; margin-top: 50px;"></img>
         <button disabled='disabled' v-if="lesson.spaces === 0"><b>Add to Cart</b></button>
         <button @click="addItem(lesson)" v-if="lesson.spaces !== 0"><b>Add to Cart</b></button>
         <span v-if="lesson.spaces < 5">
@@ -97,9 +102,9 @@
         <h2>Checkout</h2>
         <form id="checkoutForm">
           <form>
-            <label for="name"><b>Name:</b></label>
+            <label for="name" style="margin-left: 70px;"><b>Name:</b></label>
             <input type="text" id="name" name="name" pattern="[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*"
-              action="required">
+              action="required"><br>
             <label for="phone"><b>Phone Number:</b></label>
             <input type="tel" id="phone" name="phone" pattern="\d{10}" action="required">
             <button @click="submitForm"><b>Checkout</b></button>
