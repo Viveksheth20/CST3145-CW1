@@ -104,8 +104,9 @@
           <form>
             <label for="name" style="margin-left: 70px;" action="required"><b>Name:</b></label>
             <input type="text" id="name" name="name" pattern="[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*" action="required"><br>
-            Name: <input type = "text" name = "name" required>
-<input @click="submitForm" type = "submit" >
+            <label for="phone"><b>Phone Number:</b></label>
+            <input type="tel" id="phone" name="phone" pattern="\d{10}" action="required"><br>
+            <button @click="submitForm" style="margin-left: 170px;"><b>Checkout</b></button>
           </form>
       </div>
     </div>
