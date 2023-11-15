@@ -9,11 +9,8 @@
   <link rel="stylesheet" href="style.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://kit.fontawesome.com/4ce861a80c.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.7.8/dist/vue.js"></script>
-
-  <style>
-
-  </style>
 </head>
 
 <body>
@@ -21,7 +18,7 @@
     <!-- Output banner and first part of navigation -->
     <nav class="navbar navbar-expand-md bg-dark fixed-top" style="background-color: black;">
       <div class="collapse navbar-collapse" id="collapsibleNavbar">
-        <form class="navbar-form navbar-right" style="margin-left:1000px; margin-top:20px;">
+        <form class="navbar-form navbar-right" style="margin-left:900px; margin-top:20px;">
           <div class="input-group">
             <input type="text" class="form-control" placeholder="SEARCH" name="search">
             <div class="input-group-btn" style="background-color: black; margin-top: 0.5px; width: 40px;">
@@ -32,147 +29,175 @@
             </div>
           </div>
         </form>
-        <button @click="showCheckout" style="margin-left:50px; background-color: #00000000;">
-          <img style="height:40px; width:50px;" src="images\basket1.png">&nbsp;&nbsp;&nbsp;
-          <b>{{cartItemCount}}&nbsp;&nbsp;</b>
+        <button @click="showCheckout" v-if="cartItemCount>0" style="margin-left:100px; background-color: #00000000;">
+          <img src=""></i>
+          <b>{{cartItemCount}}</b>
         </button>
-        <button disabled='disabled' v-else><img src="images/cart.png"><b>Basket {{cartItemCount}}</b></button>
+        <button disabled='disabled' v-else style="margin-left: 80px; margin-top: 18px;"><i class="fa-solid fa-cart-shopping"></i></i><b>Basket
+            {{cartItemCount}}</b></button>
       </div>
     </nav>
     <div v-if="showProduct">
-      <div class="sort" style="margin-left:1300px; margin-top:100px;">
-        <select style="margin-bottom:20px; background-color:#000000; color:#ffffff;">
-          <option>---SORT---</option>
-          <option value="SUBJECT"><a href="#">SUBJECT</a></option>
-          <option value="LOCATION"><a href="#">LOCATION</a></option>
-          <option value="PRICE"><a href="#">PRICE</a></option>
-          <option value="AVAILABILITY"><a href="#">AVAILABILITY</a></option>
-        </select>
+      <div style="margin-top: 100px;" id="sortByForm">
+        <label>
+          <input type="radio" v-model="sortby" value="subject" checked>
+          Sort by subject
+        </label>
+
+        <label>
+          <input type="radio" v-model="sortby" value="price">
+          Sort by Price
+        </label>
+
+        <label>
+          <input type="radio" v-model="sortby" value="location">
+          Sort by location
+        </label>
+
+        <label>
+          <input type="radio" v-model="sortby" value="spaces">
+          Sort by spaces
+        </label>
+
+        <div>
+          <input type="radio" v-model="orderby" value="asc" checked>
+          Ascending
+          <input type="radio" v-model="orderby" value="dec">
+          Descending
+        </div>
       </div>
-      <div class="card" v-for="lesson in lessons">
+      <div class="card" v-for="lesson in sortAndorder">
         <div class="card-body text-center">
           <p><b>Subject: </b>{{lesson.subject}}</p>
           <p><b>Location: </b>{{lesson.location}}</p>
           <p><b>Price: </b>£{{lesson.price}}</p>
-          <p><b>Availability: </b>{{lesson.spaces}}</p>
+          <p><b>spaces: </b>{{lesson.spaces}}</p>
         </div>
         <img :src="lesson.image" style="width: 50px; margin-left: 130px; padding: 0px;"></img>
         <button disabled='disabled' v-if="lesson.spaces === 0"><b>Add to Cart</b></button>
         <button @click="addItem(lesson)" v-if="lesson.spaces !== 0"><b>Add to Cart</b></button>
-        <span v-if='lesson.spaces === 0'>All out!</span>
-        <span v-else-if="lesson.spaces < 5">
-          Only {{lesson.spaces }} left!
+        <span v-if="lesson.spaces < 5">
+          Only {{lesson.spaces}} left!
         </span>
       </div>
     </div>
     <div v-else>
       <!-- Basket page -->
-      <div class="card" v-for="lesson in cart" style="margin-top: 150px;">
+      <div class="card" v-for="lesson in cart" :key="lesson.subject" style="margin-top: 150px;">
         <div class="card-body text-center">
           <p><b>Subject: </b>{{lesson.subject}}</p>
           <p><b>Location: </b>{{lesson.location}}</p>
           <p><b>Price: </b>£{{lesson.price}}</p>
-          <p><b>Availability: </b>{{lesson.spaces}}</p>
+          <p><b>spaces: </b>{{lesson.spaces}}</p>
         </div>
         <img :src="lesson.image" style="width: 50px; margin-left: 130px; padding: 0px;"></img>
         <button @click="removeItem(lesson)"> Remove</button>
       </div>
+      <div class="checkout" style="margin-top: 100px;">
+        <h2>Checkout</h2>
+        <form id="checkoutForm">
+          <form>
+            <label for="name"><b>Name:</b></label>
+            <input type="text" id="name" name="name" pattern="[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*"
+              action="required">
+            <label for="phone"><b>Phone Number:</b></label>
+            <input type="tel" id="phone" name="phone" pattern="\d{10}" action="required">
+            <button @click="submitForm"><b>Checkout</b></button>
+          </form>
+      </div>
     </div>
-    <div class="checkout" style="margin-top: 100px;">
-      <h2>Checkout</h2
-      <form id="checkoutForm">
-        <table>
-          <tr>
-            <td><label for="name"><b>Name:</b></label></td>
-            <td><input type="text" id="name" name="name" required></td>
-          </tr>
-          <tr>
-            <td><label for="phone"><b>Phone Number:</b></label></td>
-            <td>
-              <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" required>
-            </td>
-          </tr>
-          <tr>
-            <td></td>
-            <td><button type="submit"><b>Checkout</b></button></td>
-          </tr>
-        </table>
-      </form>
-    </div>
-    <script>
-      let app = new Vue({
-        el: "#app",
-        data: {
-          cart: [],
-          lessons: [],
-          showProduct: true,
+  </div>
+  <script>
+    let app = new Vue({
+      el: "#app",
+      data: {
+        cart: [],
+        lessons: [],
+        showProduct: true,
+        sortby: "subject",
+        orderby: "asc",
+      },
+
+      methods: {
+        submitForm() {
+          alert('Order submitted!')
+          // Remove all elements from the cart array
+          this.cart.splice(0, this.cart.length);
+          this.showProduct = true;
+
+        },
+        addItem: function (lesson) {
+          this.cart.push(lesson);
+          // Find the index of the product in the lesson array
+          const index = this.cart.findIndex(item => item.subject === lesson.subject);
+          this.lessons[index].spaces -= 1;
+        },
+        removeItem: function (basket) {
+
+          // Find the index of the product in the cart array
+          const index = this.cart.findIndex(item => item.subject === basket.subject);
+          this.lessons[index].spaces += 1;
+
+          // Remove the product from the cart array using the index
+          if (index !== -1) {
+            this.cart.splice(index, 1);
+          }
+          if (this.cart.length === 0) {
+            this.showProduct = true;
+          }
+        },
+        showCheckout() {
+          this.showProduct = this.showProduct ? false : true;
         },
 
-        methods: {
-          addItem: function (lesson) {
-            this.cart.push(lesson);
-            console.log(lesson);
-            this.lessons[lesson.id].spaces -= 1;
-            console.log(this.cartCount(lesson.id));
-            console.log(this.lessons[lesson.id]);
-            console.log(this.lessons[lesson.id].spaces);
-          },
-          removeItem: function (lesson) {
-            this.cart.push(lesson);
-            console.log(lesson);
-            this.lessons[lesson.id].spaces -= -1;
-            console.log(this.cartCount(lesson.id));
-            console.log(this.lessons[lesson.id]);
-            console.log(this.lessons[lesson.id].spaces);
-          },
-          showCheckout() {
-            this.showProduct = this.showProduct ? false : true;
-          },
-          cartCount(id) {
-            let count = 0;
-            for (let i = 0; i < this.cart.length; i++) {
-              if (this.cart[i].id === id) {
-                count++;
-              }
+      },
+
+      computed: {
+
+        cartItemCount: function () { // the property name
+          // its value is calculated when it is called
+          return this.cart.length || 0;
+        },
+        disableCart: function () {
+          return this.cartItemCount > 0;
+        },
+        sortAndorder() {
+          // the comparison function that defines the order
+          const compare = (a, b) => {
+            if (this.orderby == "asc") {
+              if (a[this.sortby] > b[this.sortby]) return 1;
+              if (a[this.sortby] < b[this.sortby]) return -1;
+              return 0;
+            } else if (this.orderby == "dec") {
+              if (a[this.sortby] > b[this.sortby]) return -1;
+              if (a[this.sortby] < b[this.sortby]) return 1;
+              return 0;
             }
-            return count;
-          },
-          canAddToCart(arrayy) {
-            return arrayy.availability > this.cartCount(arrayy.id);
-          },
+          }
+          // sort the 'lessons' array and return it
+          return this.lessons.slice().sort(compare);
         },
+      },
 
-        computed: {
-
-          cartItemCount: function () { // the property name
-            // its value is calculated when it is called
-            return this.cart.length || 0;
-          },
-          disableCart: function () {
-            return this.cartItemCount > 0;
-          },
-        },
-
-        mounted() {
-          // Fetch lessons data from an external JSON file using Fetch API
-          fetch('lessons.json')
-            .then(response => {
-              if (!response.ok) {
-                throw new Error('Network response was not ok');
-              }
-              return response.json();
-            })
-            .then(data => {
-              // Assign the fetched data to the Vue instance's data property
-              this.lessons = data.lessons;
-            })
-            .catch(error => {
-              console.error('Error fetching lessons:', error);
-            });
-        }
-      })
-
-    </script>
+      mounted() {
+        // Fetch lessons data from an external JSON file using Fetch API
+        fetch('lessons.json')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(data => {
+            // Assign the fetched data to the Vue instance's data property
+            this.lessons = data.lessons;
+          })
+          .catch(error => {
+            console.error('Error fetching lessons:', error);
+          });
+      }
+    })
+  </script>
 </body>
 
 </html>
