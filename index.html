@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>CS3145 CW1</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.8/dist/vue.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.8/dist/vue.js"></script>
+  <script src="https://kit.fontawesome.com/4ce861a80c.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <div id="app">
+    <!-- Output banner and first part of navigation -->
+    <nav class="navbar navbar-expand-md bg-dark fixed-top">
+      <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <form class="navbar-form navbar-right" style="margin-left:900px; margin-top:20px;">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="SEARCH" name="search">
+            <div class="input-group-btn" style="background-color: black; margin-top: 0.5px; width: 40px;">
+              <a href="#"><button class="btn" class="submit"
+                  style="background-color: black; width: px; height: 40px; margin-top:-1px">
+                  <img src="Images\search.png" style="width: 30px; height: 30px; margin-top:-5px;">
+                </button></a>
+            </div>
+          </div>
+        </form>
+        <button @click="showCheckout" v-if="cartItemCount>0" style="margin-left:100px; background-color: #00000000;">
+          <img src="Images\basket.png" style="width: 50px; height: 50px;">
+          <b>Basket &nbsp;{{cartItemCount}}</b>
+        </button>
+        <button disabled='disabled' v-else style="margin-left: 80px; margin-top: 18px;"><img src="Images\basket.png"
+            style="width: 50px; height: 50px;"><b>Basket
+            {{cartItemCount}}</b></button>
+      </div>
+    </nav>
+    <div v-if="showProduct">
+      <div style="margin-top: 100px;" id="sortByForm">
+        <label>
+          <input type="radio" v-model="sortby" value="Default" checked>
+          Defaut
+        </label>
+
+        <label>
+          <input type="radio" v-model="sortby" value="subject">
+          Sort by subject
+        </label>
+
+        <label>
+          <input type="radio" v-model="sortby" value="price">
+          Sort by Price
+        </label>
+
+        <label>
+          <input type="radio" v-model="sortby" value="location">
+          Sort by location
+        </label>
+
+        <label>
+          <input type="radio" v-model="sortby" value="spaces">
+          Sort by spaces
+        </label>
+
+        <div>
+          <input type="radio" v-model="orderby" value="asc" checked>
+          Ascending
+          <input type="radio" v-model="orderby" value="dec">
+          Descending
+        </div>
+      </div>
+      <div class="card" v-for="lesson in sortAndorder">
+        <div class="card-body text-center">
+          <p><b>Subject: </b>{{lesson.subject}}</p>
+          <p><b>Location: </b>{{lesson.location}}</p>
+          <p><b>Price: </b>£{{lesson.price}}</p>
+          <p><b>spaces: </b>{{lesson.spaces}}</p>
+        </div>
+        <img :src="lesson.image" style="width: 50px; margin-left: 130px; padding: 0px;"></img>
+        <button disabled='disabled' v-if="lesson.spaces === 0"><b>Add to Cart</b></button>
+        <button @click="addItem(lesson)" v-if="lesson.spaces !== 0"><b>Add to Cart</b></button>
+        <span v-if="lesson.spaces < 5">
+          Only {{lesson.spaces}} left!
+        </span>
+      </div>
+    </div>
+    <div v-else>
+      <!-- Basket page -->
+      <div class="card" v-for="lesson in cart" :key="lesson.subject" style="margin-top: 150px;">
+        <div class="card-body text-center">
+          <p><b>Subject: </b>{{lesson.subject}}</p>
+          <p><b>Location: </b>{{lesson.location}}</p>
+          <p><b>Price: </b>£{{lesson.price}}</p>
+          <p><b>spaces: </b>{{lesson.spaces}}</p>
+        </div>
+        <img :src="lesson.image" style="width: 50px; margin-left: 130px; padding: 0px;"></img>
+        <button @click="removeItem(lesson)"> Remove</button>
+      </div>
+      <div class="checkout" style="margin-top: 100px;">
+        <h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Checkout</h2>
+        <form id="checkoutForm">
+          <form>
+            <label for="name" style="margin-left: 70px;" action="required"><b>Name:</b></label>
+            <input type="text" id="name" name="name" pattern="[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*"
+              action="required"><br>
+            <label for="phone"><b>Phone Number:</b></label>
+            <input type="tel" id="phone" name="phone" pattern="\d{10}" action="required"><br>
+            <button @click="submitForm" style="margin-left: 170px;"><b>Checkout</b></button>
+          </form>
+      </div>
+    </div>
+  </div>
+  <script>
+    let app = new Vue({
+      el: "#app",
+      data: {
+        cart: [],
+        lessons: [],
+        showProduct: true,
+        sortby: "default",
+        orderby: "asc",
+      },
+
+      methods: {
+        submitForm() {
+          alert('Order submitted!')
+          // Remove all elements from the cart array
+          this.cart.splice(0, this.cart.length);
+          this.showProduct = true;
+
+        },
+        addItem: function (lesson) {
+          this.cart.push(lesson);
+          // Find the index of the product in the lesson array
+          const index = this.cart.findIndex(item => item.subject === lesson.subject);
+          this.lessons[index].spaces -= 1;
+        },
+        removeItem: function (basket) {
+
+          // Find the index of the product in the cart array
+          const index = this.cart.findIndex(item => item.subject === basket.subject);
+          this.lessons[index].spaces += 1;
+
+          // Remove the product from the cart array using the index
+          if (index !== -1) {
+            this.cart.splice(index, 1);
+          }
+          if (this.cart.length === 0) {
+            this.showProduct = true;
+          }
+        },
+        showCheckout() {
+          this.showProduct = this.showProduct ? false : true;
+        },
+
+      },
+
+      computed: {
+
+        cartItemCount: function () { // the property name
+          // its value is calculated when it is called
+          return this.cart.length || 0;
+        },
+        disableCart: function () {
+          return this.cartItemCount > 0;
+        },
+        sortAndorder() {
+          // the comparison function that defines the order
+          const compare = (a, b) => {
+            if (this.orderby == "asc") {
+              if (a[this.sortby] > b[this.sortby]) return 1;
+              if (a[this.sortby] < b[this.sortby]) return -1;
+              return 0;
+            } else if (this.orderby == "dec") {
+              if (a[this.sortby] > b[this.sortby]) return -1;
+              if (a[this.sortby] < b[this.sortby]) return 1;
+              return 0;
+            }
+          }
+          // sort the 'lessons' array and return it
+          return this.lessons.slice().sort(compare);
+        },
+      },
+
+      mounted() {
+        // Fetch lessons data from an external JSON file using Fetch API
+        fetch('lessons.json')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(data => {
+            // Assign the fetched data to the Vue instance's data property
+            this.lessons = data.lessons;
+          })
+          .catch(error => {
+            console.error('Error fetching lessons:', error);
+          });
+      }
+    })
+  </script>
+</body>
+
+</html>
