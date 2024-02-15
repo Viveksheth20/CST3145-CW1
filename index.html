@@ -128,13 +128,13 @@
         sortby: "default",
         orderby: "asc",
       },
-
-      methods: {
-        created: function () {
+      created: function () {
           if ("serviceWorker" in navigator) {
             navigator.serviceWorker.register("service-worker.js");
           }
         },
+      methods: {
+       
 
         submitForm() {
           const name = document.getElementById('name');
