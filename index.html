@@ -26,16 +26,19 @@
             <div class="input-group-btn" style="background-color: black; margin-top: 0.5px; width: 40px;">
               <a href="#"><button class="btn" class="submit"
                   style="background-color: black; width: px; height: 40px; margin-top:-1px">
-                  <img src="https://project-env.eba-ucw3xqhp.eu-west-2.elasticbeanstalk.com/Images\search.png" style="width: 30px; height: 30px; margin-top:-5px;">
+                  <img src="https://project-env.eba-ucw3xqhp.eu-west-2.elasticbeanstalk.com/Images\search.png"
+                    style="width: 30px; height: 30px; margin-top:-5px;">
                 </button></a>
             </div>
           </div>
         </form>
         <button @click="showCheckout" v-if="cartItemCount>0" style="margin-left:100px; background-color: #00000000;">
-          <img src="https://project-env.eba-ucw3xqhp.eu-west-2.elasticbeanstalk.com/Images\basket.png" style="width: 50px; height: 50px;">
+          <img src="https://project-env.eba-ucw3xqhp.eu-west-2.elasticbeanstalk.com/Images\basket.png"
+            style="width: 50px; height: 50px;">
           <b>Basket &nbsp;{{cartItemCount}}</b>
         </button>
-        <button disabled='disabled' v-else style="margin-left: 80px; margin-top: 18px;"><img src="https://project-env.eba-ucw3xqhp.eu-west-2.elasticbeanstalk.com/Images\basket.png"
+        <button disabled='disabled' v-else style="margin-left: 80px; margin-top: 18px;"><img
+            src="https://project-env.eba-ucw3xqhp.eu-west-2.elasticbeanstalk.com/Images\basket.png"
             style="width: 50px; height: 50px;"><b>Basket
             {{cartItemCount}}</b></button>
       </div>
@@ -127,6 +130,12 @@
       },
 
       methods: {
+        created: function () {
+          if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("service-worker.js");
+          }
+        },
+
         submitForm() {
           const name = document.getElementById('name');
           const number = document.getElementById('phone');
@@ -229,6 +238,7 @@
             console.error('Error fetching lessons:', error);
           });
       }
+
     })
   </script>
 </body>
