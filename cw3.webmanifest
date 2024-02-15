@@ -1,7 +1,7 @@
 {
-    "name": "My Pet Store PWA",
-    "short_name": "Petstore",
-    "description": "My online pet store",
+    "name": "Class Store",
+    "short_name": "classtore",
+    "description": "My online classes store",
     "icons": [
         {
             "src": "images/pg.png",
