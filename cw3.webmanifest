@@ -1,0 +1,20 @@
+{
+    "name": "My Pet Store PWA",
+    "short_name": "Petstore",
+    "description": "My online pet store",
+    "icons": [
+        {
+            "src": "https://project-env.eba-ucw3xqhp.eu-west-2.elasticbeanstalk.com/Images\basket.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "https://project-env.eba-ucw3xqhp.eu-west-2.elasticbeanstalk.com/Images\basket.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "start_url": "index.html",
+    "display": "fullscreen",
+    "background_color": "#260bca"
+}
