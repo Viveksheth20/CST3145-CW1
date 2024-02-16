@@ -18,17 +18,8 @@ var cacheName = "petstore-v1"; var cacheFiles = ["index.html",   //"products.js"
 self.addEventListener("install", function (e) {
     console.log("[Service Worker] Install");
     e.waitUntil(caches.open(cacheName).then(function (cache) {
-        console.log("[Service Worker] Caching files"); return cache.addAll(cacheFiles);
+        console.log("[Service Worker] Caching files"); 
+        return cache.addAll(cacheFiles);
     }
     ));
 });
-self.addEventListener('https://project-env.eba-ucw3xqhp.eu-west-2.elasticbeanstalk.com/lessons', function (e) {
-    e.respondWith(
-        // check if the cache has the file     
-        caches.match(e.request).then(function (r) {
-            console.log('[Service Worker] Fetching resource: ' + e.request.url);
-            // r is the matching file if it exists in the cache        
-            return r
-        }));
-});
-
