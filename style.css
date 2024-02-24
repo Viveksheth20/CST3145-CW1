@@ -2,6 +2,7 @@ body{
   max-width: max-content;
   height: min-content;
 }
+
 nav {
   background-color: #000000;
   position: fixed;
