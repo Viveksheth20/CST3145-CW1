@@ -5,13 +5,13 @@
   <title>CS3145 CW1</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="style.css">
   <link rel="icon" type="image/x-icon" href="images/favicon.ico">
   <link rel="manifest" href="cw3.webmanifest">
   <script src="https://cdn.jsdelivr.net/npm/vue@2.7.8/dist/vue.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <script src="https://cdn.jsdelivr.net/npm/vue@2.7.8/dist/vue.js"></script>
   <script src="https://kit.fontawesome.com/4ce861a80c.js" crossorigin="anonymous"></script>
 </head>
@@ -44,8 +44,21 @@
             {{cartItemCount}}</b></button>
       </div>
     </nav>
+    <div style="margin-top: 100px;margin-left: 20px;">
+      <button @click="deleteAllCaches" class="test-elem"> <span class="fas fa-trash"></span>
+        Delete All Caches
+      </button>
+      <button @click="reloadPage" class="test-elem"> <span class="fas fa-sync"></span>
+        Reload Page
+      </button>
+      <strong class="test-elem">HTTPS Test: </strong>
+      <a v-bind:href="serverURL" target="_blank">link</a>
+      <button @click="unregisterAllServiceWorkers" class="test-elem"> <span class="fab fa-uniregistry"></span>
+        Unregister All ServiceWorkers
+      </button>
+    </div>
     <div v-if="showProduct">
-      <div style="margin-top: 100px;" id="sortByForm">
+      <div style="margin-top: 10px;margin-left: 20px;" id="sortByForm">
         <label>
           <input type="radio" v-model="sortby" value="Default" checked>
           Defaut
@@ -106,7 +119,7 @@
         <button @click="removeItem(lesson)"> Remove</button>
       </div>
       <div class="checkout" style="margin-top: 100px;">
-        <h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Checkout</h2>
+        <h2>Checkout</h2>
         <form id="checkoutForm">
           <form>
             <label for="name" style="margin-left: 70px;" action="required"><b>Name:</b></label>
@@ -123,6 +136,8 @@
     let app = new Vue({
       el: "#app",
       data: {
+        //serverURL: "http://localhost:3000/collections/products" 
+        serverURL: "https://project-env.eba-ucw3xqhp.eu-west-2.elasticbeanstalk.com/lessons",
         cart: [],
         lessons: [],
         showProduct: true,
@@ -130,12 +145,28 @@
         orderby: "asc",
       },
       created: function () {
-          if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.register("service-worker.js");
-          }
-        },
+        if ("serviceWorker" in navigator) {
+          navigator.serviceWorker.register("service-worker.js");
+        }
+      },
       methods: {
-       
+
+        reloadPage() {
+          window.location.reload();
+        },
+
+        unregisterAllServiceWorkers() {
+          navigator.serviceWorker.getRegistrations().then(function (registrations) {
+            for (let registration of registrations) { registration.unregister() }
+          });
+          console.log("ServiceWorkers Unregistered");
+        },
+
+        deleteAllCaches() {
+          caches.keys().then(function (names) { for (let name of names) caches.delete(name); });
+          console.log("All Caches Deleted");
+        },
+
         submitForm() {
           const name = document.getElementById('name');
           const number = document.getElementById('phone');
@@ -242,4 +273,5 @@
     })
   </script>
 </body>
+
 </html>
