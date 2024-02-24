@@ -2,7 +2,6 @@ body{
   max-width: 1650px;
 }
 nav {
-  overflow: hidden;
   background-color: #000000;
   position: fixed;
   top: 0;
