@@ -18,33 +18,43 @@
 
 <body>
   <div id="app">
-    <!-- Output banner and first part of navigation -->
-    <nav class="navbar navbar-expand-md bg-dark fixed-top">
-      <div class="collapse navbar-collapse" id="collapsibleNavbar">
-        <form class="navbar-form navbar-right" style="margin-left:900px; margin-top:20px;">
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="SEARCH" name="search">
-            <div class="input-group-btn" style="background-color: black; margin-top: 0.5px; width: 40px;">
-              <a href="#"><button class="btn" class="submit"
-                  style="background-color: black; width: px; height: 40px; margin-top:-1px">
-                  <img src="https://project-env.eba-ucw3xqhp.eu-west-2.elasticbeanstalk.com/Images\search.png"
-                    style="width: 30px; height: 30px; margin-top:-5px;">
-                </button></a>
+    <header>
+      <!-- Output banner and first part of navigation -->
+      <nav class="navbar navbar-expand-md bg-dark fixed-top">
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+          <form class="navbar-form navbar-right" style="margin-left:900px; margin-top:20px;">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="SEARCH" name="search">
+              <div class="input-group-btn" style="background-color: black; margin-top: 0.5px; width: 40px;">
+                <a href="#"><button class="btn" class="submit"
+                    style="background-color: black; width: px; height: 40px; margin-top:-1px">
+                    <img src="https://project-env.eba-ucw3xqhp.eu-west-2.elasticbeanstalk.com/Images\search.png"
+                      style="width: 30px; height: 30px; margin-top:-5px;">
+                  </button></a>
+              </div>
             </div>
-          </div>
-        </form>
-        <button @click="showCheckout" v-if="cartItemCount>0" style="margin-left:100px; background-color: #00000000;">
-          <img src="https://project-env.eba-ucw3xqhp.eu-west-2.elasticbeanstalk.com/Images\basket.png"
-            style="width: 50px; height: 50px;">
-          <b>Basket &nbsp;{{cartItemCount}}</b>
-        </button>
-        <button disabled='disabled' v-else style="margin-left: 50px; margin-top: 18px;"><img
-            src="https://project-env.eba-ucw3xqhp.eu-west-2.elasticbeanstalk.com/Images\basket.png"
-            style="width: 50px; height: 50px;"><b>Basket
-            {{cartItemCount}}</b></button>
-      </div>
-    </nav>
-    <div style="margin-top: 100px;margin-left: 20px;">
+          </form>
+          <button @click="showCheckout" v-if="cartItemCount>0" style="margin-left:100px; background-color: #00000000;">
+            <img src="https://project-env.eba-ucw3xqhp.eu-west-2.elasticbeanstalk.com/Images\basket.png"
+              style="width: 50px; height: 50px;">
+            <b>Basket &nbsp;{{cartItemCount}}</b>
+          </button>
+          <button disabled='disabled' v-else style="margin-left: 50px; margin-top: 18px;"><img
+              src="https://project-env.eba-ucw3xqhp.eu-west-2.elasticbeanstalk.com/Images\basket.png"
+              style="width: 50px; height: 50px;"><b>Basket
+              {{cartItemCount}}</b></button>
+        </div>
+      </nav>
+    </header>
+    <button style="margin-top: 100px;" v-if="testConsole" @click="toggleShowTestConsole">
+      <span class="fas fa-text-height"></span>
+      Test Console
+    </button>
+    <div v-if="testConsole && showTestConsole" class="test-console">
+      <button @click="saveProductToDB" class="test-elem">
+        <span class="fas fa-save"></span>
+        Test Save a Product to the DB
+      </button>
       <button @click="deleteAllCaches" class="test-elem"> <span class="fas fa-trash"></span>
         Delete All Caches
       </button>
@@ -57,8 +67,8 @@
         Unregister All ServiceWorkers
       </button>
     </div>
-    <div v-if="showProduct">
-      <div style="margin-top: 10px;margin-left: 20px;" id="sortByForm">
+    <div style="margin-top: 20px;margin-left: 20px;" v-if="showProduct">
+      <div style="margin-left: 20px;" id="sortByForm">
         <label>
           <input type="radio" v-model="sortby" value="Default" checked>
           Defaut
@@ -138,6 +148,8 @@
       data: {
         //serverURL: "http://localhost:3000/collections/products" 
         serverURL: "https://project-env.eba-ucw3xqhp.eu-west-2.elasticbeanstalk.com/lessons",
+        testConsole: true,
+        showTestConsole: false,
         cart: [],
         lessons: [],
         showProduct: true,
@@ -148,8 +160,45 @@
         if ("serviceWorker" in navigator) {
           navigator.serviceWorker.register("service-worker.js");
         }
+        // fetch(this.serverURL).then(
+        //   function (response) {
+        //     response.text().then(
+        //       function (text) {
+        //         alert(text);
+        //       }
+        //     )
+        //   }
+        // );
       },
       methods: {
+        saveProductToDB() {
+          const newProduct = {
+            "subject": "Move Maker",
+            "location": "123 Oakwook Gardens, Cityville",
+            "price": 95,
+            "spaces": 15,
+            "image": "Images/pg.png"
+          }
+
+          //set the url to your server and route
+          fetch(this.serverURL, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newProduct),
+          }).then(response => {
+            if (!response.ok) {
+              throw new Error('error');
+            }
+            return response.json();
+          }).then(json => {
+            console.log("Success: " + json.acknowledged);
+          }).catch(error => {
+            console.error('Error submitting new product:', error);
+          });
+          this.lessons.push(newProduct);
+        },
 
         reloadPage() {
           window.location.reload();
@@ -222,6 +271,9 @@
         showCheckout() {
           this.showProduct = this.showProduct ? false : true;
         },
+        toggleShowTestConsole() {
+          this.showTestConsole = !this.showTestConsole;
+        },
 
       },
 
@@ -273,4 +325,5 @@
     })
   </script>
 </body>
+
 </html>
