@@ -2,15 +2,9 @@ body{
   width: auto;
   height: auto;
 }
-
-nav {
-  display: block;
-  background-color: #000000;
-  position: fixed;
-  height: 90px;
-  width: auto;
+.navigation {
+  height: 100px;
 }
-
 .card {
   display: flex;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);

@@ -18,35 +18,35 @@
 
 <body>
   <div id="app">
-    <header>
-      <!-- Output banner and first part of navigation -->
-      <nav class="navbar navbar-expand-md bg-dark fixed-top">
-        <div class="collapse navbar-collapse" id="collapsibleNavbar">
-          <form class="navbar-form navbar-right" style="margin-left:900px; margin-top:20px;">
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="SEARCH" name="search">
-              <div class="input-group-btn" style="background-color: black; margin-top: 0.5px; width: 40px;">
-                <a href="#"><button class="btn" class="submit"
-                    style="background-color: black; width: px; height: 40px; margin-top:-1px">
-                    <img src="https://project-env.eba-ucw3xqhp.eu-west-2.elasticbeanstalk.com/Images\search.png"
-                      style="width: 30px; height: 30px; margin-top:-5px;">
-                  </button></a>
-              </div>
+    <!-- Output banner and first part of navigation -->
+    <!-- <nav class="navbar navbar-expand-md bg-dark d-flex justify-content-center align-content-center">
+        
+      </nav> -->
+    <div class="navigation container-fluid bg-dark d-flex justify-content-center align-content-center">
+        <form class="navbar-form navbar-right" style="margin-top:20px;">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="SEARCH" name="search">
+            <div class="input-group-btn" style="background-color: black; margin-top: 0.5px; width: 40px;">
+              <a href="#"><button class="btn" class="submit"
+                  style="background-color: black; width: px; height: 40px; margin-top:-1px">
+                  <img src="https://project-env.eba-ucw3xqhp.eu-west-2.elasticbeanstalk.com/Images/search.png"
+                    style="width: 30px; height: 30px; margin-top:-5px;">
+                </button></a>
             </div>
-          </form>
-          <button @click="showCheckout" v-if="cartItemCount>0" style="margin-left:100px; background-color: #00000000;">
-            <img src="https://project-env.eba-ucw3xqhp.eu-west-2.elasticbeanstalk.com/Images\basket.png"
-              style="width: 50px; height: 50px;">
-            <b>Basket &nbsp;{{cartItemCount}}</b>
-          </button>
-          <button disabled='disabled' v-else style="margin-left: 50px; margin-top: 18px;"><img
-              src="https://project-env.eba-ucw3xqhp.eu-west-2.elasticbeanstalk.com/Images\basket.png"
-              style="width: 50px; height: 50px;"><b>Basket
-              {{cartItemCount}}</b></button>
-        </div>
-      </nav>
-    </header>
-    <button style="margin-top: 100px;" v-if="testConsole" @click="toggleShowTestConsole">
+          </div>
+        </form>
+        <button @click="showCheckout" v-if="cartItemCount>0" style="margin-left:100px; background-color: #00000000;">
+          <img src="https://project-env.eba-ucw3xqhp.eu-west-2.elasticbeanstalk.com/Images/basket.png"
+            style="width: 50px; height: 50px;">
+          <b>Basket &nbsp;{{cartItemCount}}</b>
+        </button>
+        <button disabled='disabled' v-else style="margin-left: 50px; margin-top: 18px;"><img
+            src="https://project-env.eba-ucw3xqhp.eu-west-2.elasticbeanstalk.com/Images/basket.png"
+            style="width: 50px; height: 50px;"><b>Basket
+            {{cartItemCount}}</b></button>
+
+    </div>
+    <button style="margin-top: 10px;" v-if="testConsole" @click="toggleShowTestConsole">
       <span class="fas fa-text-height"></span>
       Test Console
     </button>
@@ -159,7 +159,7 @@
       created: function () {
         if ("serviceWorker" in navigator) {
           navigator.serviceWorker.register("service-worker.js");
-        }
+        };
         // fetch(this.serverURL).then(
         //   function (response) {
         //     response.text().then(
@@ -173,15 +173,15 @@
       methods: {
         saveProductToDB() {
           const newProduct = {
-            "subject": "Move Maker",
+            "subject": "Movie Maker",
             "location": "123 Oakwook Gardens, Cityville",
             "price": 95,
             "spaces": 15,
-            "image": "Images/pg.png"
+            "image": "favicon.ico"
           }
 
           //set the url to your server and route
-          fetch(this.serverURL, {
+          fetch("https://project-env.eba-ucw3xqhp.eu-west-2.elasticbeanstalk.com/lessons", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -194,10 +194,12 @@
             return response.json();
           }).then(json => {
             console.log("Success: " + json.acknowledged);
+            alert('Order submitted!')
+            this.lessons.push(newProduct);
           }).catch(error => {
-            console.error('Error submitting new product:', error);
+            console.error('Error submitting order:', error);
           });
-          this.lessons.push(newProduct);
+
         },
 
         reloadPage() {
@@ -240,13 +242,13 @@
             return response.json();
           }).then(json => {
             console.log("Success: " + json.acknowledged);
+            alert('Order submitted!')
+            // Remove all elements from the cart array
+            this.cart.splice(0, this.cart.length);
+            this.showProduct = true;
           }).catch(error => {
             console.error('Error submitting order:', error);
           });
-          alert('Order submitted!')
-          // Remove all elements from the cart array
-          this.cart.splice(0, this.cart.length);
-          this.showProduct = true;
 
         },
         addItem: function (lesson) {
