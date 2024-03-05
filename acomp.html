@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.8/dist/vue.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <header>
+            <button @click="showCheckout">Checkout</button>
+        </header>
+        <main>
+            <h3>
+                <component :is="currentView">
+                    </component>
+            </h3>
+        </main>
+    </div>
+
+
+    <script>
+        const HeaderCompoent = {
+            template: `<div>Header Compoent</div>`
+        }
+        const FormComponent = {
+            template: `<div>Form Component</div>`
+        }
+        const BookComponent = {
+            template: `<div>Book Component</div>`
+        }
+        new Vue(
+            {
+                el: '#app',
+                components: {
+                    'book-component': BookComponent,
+                    'form-Component': FormComponent,
+                    'header-component': HeaderCompoent
+                },
+                data() {
+                    return {
+                        currentView: BookComponent
+                    }
+                },
+                methods: {
+                    showCheckout() {
+                        if (this.currentView === HeaderCompoent) {
+                            this.currentView = BookComponent
+                        } else {
+                            this.currentView = this.currentView == BookComponent ?
+                                FormComponent : HeaderCompoent;
+                        }
+                    }
+                }
+            })
+    </script>
+</body>
+
+</html>

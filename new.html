@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.8/dist/vue.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <my-component :name="name"></my-component>
+        <my-component name="Rose"></my-component>
+    </div>
+    <script type="text/x-template" id="my-component">
+            <div>     
+                 Hello {{name}} from x-template  
+             </div> 
+    </script>
+    <script>
+        const MyComponent = {
+            props: ["name"],
+            template: '#my-component'
+        };
+        new Vue({
+            el: '#app',
+            data() { return { name: "George" } },
+            components: { 'my-component': MyComponent }
+        }); </script>
+</body>
+
+</html>
