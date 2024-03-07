@@ -1,7 +1,9 @@
 <script setup>
 import ProductList from "./components/ProductList.vue";
 import Checkout from "./components/Checkout.vue";
+import test_console from "./components/testconcole.vue";
 </script>
+
 
 <template>
   <div id="app">
@@ -23,9 +25,11 @@ import Checkout from "./components/Checkout.vue";
           <b>Basket</b></button>
       </div>
     </header>
-    <main>         
-      <component :is="currentView"></component>     
-     </main>
+    <main>
+      <test-component v-if="currentView == ProductList"></test-component>
+      <component :is="currentView" :lessons="lessons" :cart="cart" @add-item="addItem" @remove-Item="removeItem">
+      </component>
+    </main>
   </div>
 
 </template>
@@ -35,24 +39,49 @@ export default {
   name: "App",
   data() {
     return {
-      cart: ["ssss"],
-
-      currentView: ProductList
+      currentView: ProductList,
+      lessons: [],
+      cart: [],
     }
   },
   components: {
     ProductList,
-    Checkout
+    Checkout,
+    'test-component': test_console,
+  },
+  created: function () {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("service-worker.js");
+    };
   },
   methods: {
     showCheckout() {
       if (this.currentView === Checkout)
         this.currentView = ProductList
       else this.currentView = Checkout;
-    }
+    },
+    addItem(lesson) {
+      this.cart.push(lesson);
+      const index = this.lessons.findIndex(item => item._id === lesson._id);
+      this.lessons[index].spaces -= 1;
+    },
+    removeItem(lesson) {
+
+      // Find the index of the product in the cart array
+      const index = this.lessons.findIndex(item => item._id === lesson._id);
+      const index2 = this.cart.findIndex(item => item._id === lesson._id);
+      this.lessons[index].spaces += 1;
+
+      // Remove the product from the cart array using the index
+      if (index2 !== -1) {
+        this.cart.splice(index2, 1);
+      }
+      if (this.cart.length === 0) {
+        this.currentView = ProductList;
+      }
+    },
   },
   computed: {
-
     cartItemCount: function () { // the property name
       // its value is calculated when it is called
       return this.cart.length || 0;
@@ -61,8 +90,24 @@ export default {
       return this.cartItemCount > 0;
     },
   },
+  mounted() {
+    // Fetch lessons data from an external JSON file using Fetch API
+    fetch('https://project-env.eba-ucw3xqhp.eu-west-2.elasticbeanstalk.com/lessons')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Assign the fetched data to the Vue instance's data property
+        this.lessons = data;
+      })
+      .catch(error => {
+        console.error('Error fetching lessons:', error);
+      });
+  },
 }
 </script>
-
 
 <style scoped></style>
