@@ -26,7 +26,7 @@ import test_console from "./components/testconcole.vue";
       </div>
     </header>
     <main>
-      <test-component v-if="currentView == ProductList"></test-component>
+      <test-component v-if="currentView == ProductList" :lessons="lessons"></test-component>
       <component :is="currentView" :lessons="lessons" :cart="cart" @add-item="addItem" @remove-Item="removeItem">
       </component>
     </main>

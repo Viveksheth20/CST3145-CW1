@@ -17,7 +17,8 @@
             </button>
             <strong class="test-elem">HTTPS Test: </strong>
             <a v-bind:href="serverURL" target="_blank">link</a>
-            <button @click="unregisterAllServiceWorkers" class="test-elem">  <font-awesome-icon icon="fab fa-uniregistry"></font-awesome-icon>
+            <button @click="unregisterAllServiceWorkers" class="test-elem"> <font-awesome-icon
+                    icon="fab fa-uniregistry"></font-awesome-icon>
                 Unregister All ServiceWorkers
             </button>
         </div>
@@ -32,8 +33,11 @@ export default {
             serverURL: "https://project-env.eba-ucw3xqhp.eu-west-2.elasticbeanstalk.com/lessons",
             testConsole: true,
             showTestConsole: false,
-    }
+        }
     },
+    props: [
+        "lessons",
+    ],
     methods: {
         saveProductToDB() {
             const newProduct = {

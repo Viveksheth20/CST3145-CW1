@@ -12,6 +12,11 @@
             "src": "images/png.png",
             "sizes": "512x512",
             "type": "image/png"
+        },
+        {
+            "src": "images/favicon.ico",
+            "sizes": "32x32",
+            "type": "image/ico"
         }
     ],
     "start_url": "index.html",
